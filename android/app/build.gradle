@@ -130,7 +130,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.myshopping"
+        applicationId "com.myshopping_rn"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
