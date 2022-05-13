@@ -1,27 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Alert, Keyboard } from "react-native";
 import firestore from "@react-native-firebase/firestore";
 
 import { Container } from "./styles";
 import { ButtonIcon } from "../ButtonIcon";
 import { Input } from "../Input";
-import { Alert } from "react-native";
 
 export function FormBox() {
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(0);
 
-  const saveProduct = () => {
-    firestore()
-      .collection("products")
-      .add({
-        description,
-        quantity,
-        done: false,
-      })
-      .then(() => {
-        Alert.alert("Produto adicionado com sucesso!");
-      })
-      .catch((error: any) => console.log(error));
+  const saveProduct = async () => {
+    if (quantity > 0) {
+      Keyboard.dismiss();
+
+      firestore()
+        .collection("products")
+        .add({
+          description,
+          quantity,
+          done: false,
+        })
+        .then(() => {
+          Alert.alert("Produto adicionado com sucesso!", "", [
+            {
+              text: "OK",
+              onPress: () => {
+                setDescription("");
+                setQuantity(0);
+              },
+            },
+          ]);
+        })
+        .catch((error: any) => console.log(error));
+    }
   };
 
   return (
@@ -29,6 +41,7 @@ export function FormBox() {
       <Input
         placeholder="Nome do produto"
         size="medium"
+        value={description}
         onChangeText={setDescription}
       />
 
@@ -37,6 +50,7 @@ export function FormBox() {
         keyboardType="numeric"
         size="small"
         style={{ marginHorizontal: 8 }}
+        value={quantity > 0 ? `${quantity}` : ""}
         onChangeText={(value) => setQuantity(Number(value))}
       />
 
