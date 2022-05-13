@@ -1,11 +1,16 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   list: {
-    width: '100%',
+    width: "100%",
     padding: 24,
   },
   content: {
-    paddingBottom: 100
-  }
+    paddingBottom: 100,
+  },
+  activityIndicator: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
