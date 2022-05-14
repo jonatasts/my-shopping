@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, RefreshControl } from "react-native";
+import { FlatList } from "react-native";
 import firestore from "@react-native-firebase/firestore";
 
-import { styles } from "./styles";
 import { Product, ProductProps } from "../Product";
+import Loading from "../Loading";
 
-import { shoppingListExample } from "../../utils/shopping.list.data";
-import theme from "../../theme";
+import { styles } from "./styles";
 
 export function ShoppingList() {
   const [products, setProducts] = useState<ProductProps[]>([]);
-  const [refreshing, setRefreshing] = useState(false);
+  const [refreshing, setRefreshing] = useState(true);
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
     const subscribe = firestore()
@@ -28,6 +28,7 @@ export function ShoppingList() {
 
         setTimeout(() => {
           setRefreshing(false);
+          if (!initialized) setInitialized(true);
         }, 2000);
       });
 
@@ -35,11 +36,7 @@ export function ShoppingList() {
   }, []);
 
   return refreshing ? (
-    <ActivityIndicator
-      size={"large"}
-      color={theme.COLORS.PURPLE}
-      style={styles.activityIndicator}
-    />
+    <Loading label={initialized ? "Atualizando..." : "Carregando..."} />
   ) : (
     <FlatList
       data={products}

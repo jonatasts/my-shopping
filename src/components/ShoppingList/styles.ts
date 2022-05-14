@@ -9,7 +9,6 @@ export const styles = StyleSheet.create({
     paddingBottom: 100,
   },
   activityIndicator: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
