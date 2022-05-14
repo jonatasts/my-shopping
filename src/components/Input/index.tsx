@@ -1,12 +1,13 @@
-import React from "react";
-import { TextInputProps } from "react-native";
+import React, { forwardRef, Ref } from "react";
+import { TextInput as TextInputType, TextInputProps } from "react-native";
 
 import { TextInput } from "./styles";
+import { Props } from "./types";
 
-type Props = TextInputProps & {
-  size?: "small" | "medium" | "large";
-} & { placeholderTextColor?: string };
+const Input = forwardRef<TextInputProps, Props>(
+  ({ size = "large", ...rest }: Props, ref: any) => {
+    return <TextInput ref={ref} size={size} {...rest} />;
+  }
+);
 
-export function Input({ size = "large", ...rest }: Props) {
-  return <TextInput size={size} {...rest} />;
-}
+export default Input;

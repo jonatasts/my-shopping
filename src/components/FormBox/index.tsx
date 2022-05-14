@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { Alert, Keyboard } from "react-native";
+import React, { useRef, useState } from "react";
+import { Alert, Keyboard, TextInput, TextInputProps } from "react-native";
 import firestore from "@react-native-firebase/firestore";
 
 import { Container } from "./styles";
 import { ButtonIcon } from "../ButtonIcon";
-import { Input } from "../Input";
+import Input from "../Input";
+import { createRef } from "react";
+import { FocusProps } from "./types";
 
 export function FormBox() {
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(0);
+  const descriptionInputRef = createRef<TextInputProps & FocusProps>();
+  const quantityInputRef = createRef<TextInputProps & FocusProps>();
 
   const saveProduct = async () => {
     if (quantity > 0 && description !== "") {
@@ -33,12 +37,20 @@ export function FormBox() {
           ]);
         })
         .catch((error: any) => console.log(error));
+    } else {
+      if (description === "" && descriptionInputRef.current) {
+        console.log("description");
+        descriptionInputRef.current.focus();
+      } else if (quantity === 0 && quantityInputRef.current) {
+        quantityInputRef.current.focus();
+      }
     }
   };
 
   return (
     <Container>
       <Input
+        ref={descriptionInputRef}
         placeholder="Nome do produto"
         size="medium"
         value={description}
@@ -46,6 +58,7 @@ export function FormBox() {
       />
 
       <Input
+        ref={quantityInputRef}
         placeholder="0"
         keyboardType="numeric"
         size="small"
