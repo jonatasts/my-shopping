@@ -11,7 +11,7 @@ export function FormBox() {
   const [quantity, setQuantity] = useState(0);
 
   const saveProduct = async () => {
-    if (quantity > 0) {
+    if (quantity > 0 && description !== "") {
       Keyboard.dismiss();
 
       firestore()
