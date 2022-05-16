@@ -11,6 +11,13 @@ export function ShoppingList() {
   const [products, setProducts] = useState<ProductProps[]>([]);
   const [refreshing, setRefreshing] = useState(true);
   const [initialized, setInitialized] = useState(false);
+  const TIME_INITIALIZED = initialized ? 500 : 2000;
+
+  useEffect(() => {
+    setTimeout(() => {
+      setInitialized(true);
+    }, 2000);
+  }, []);
 
   useEffect(() => {
     const subscribe = firestore()
@@ -29,12 +36,11 @@ export function ShoppingList() {
 
         setTimeout(() => {
           setRefreshing(false);
-          if (!initialized) setInitialized(true);
-        }, 2000);
+        }, TIME_INITIALIZED);
       });
 
     return () => subscribe();
-  }, []);
+  }, [TIME_INITIALIZED]);
 
   return refreshing ? (
     <Loading label={initialized ? "Atualizando..." : "Carregando..."} />
