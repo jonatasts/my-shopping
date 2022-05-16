@@ -25,6 +25,15 @@ export function Product({ data }: Props) {
       })
       .catch((error) => console.log(error));
   };
+
+  const onDelete = () => {
+    firestore()
+      .collection("products")
+      .doc(data.id)
+      .delete()
+      .catch((error) => console.log(error));
+  };
+
   return (
     <Container>
       <Info>
@@ -36,7 +45,7 @@ export function Product({ data }: Props) {
       <Options>
         <ButtonIcon icon={data.done ? "undo" : "check"} onPress={onDone} />
 
-        <ButtonIcon icon="delete" color="alert" />
+        <ButtonIcon icon="delete" color="alert" onPress={onDelete} />
       </Options>
     </Container>
   );
