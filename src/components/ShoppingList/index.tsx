@@ -15,6 +15,7 @@ export function ShoppingList() {
   useEffect(() => {
     const subscribe = firestore()
       .collection("products")
+      .orderBy("description")
       .onSnapshot((snapshot) => {
         setRefreshing(true);
         const data = snapshot.docs.map((doc) => {
