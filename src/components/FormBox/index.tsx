@@ -16,25 +16,19 @@ export function FormBox() {
 
   const saveProduct = async () => {
     if (quantity > 0 && description !== "") {
+      const _description = description;
+      const _quantity = quantity;
+
       Keyboard.dismiss();
+      setDescription("");
+      setQuantity(0);
 
       firestore()
         .collection("products")
         .add({
-          description,
-          quantity,
+          description: _description,
+          quantity: _quantity,
           done: false,
-        })
-        .then(() => {
-          Alert.alert("Produto adicionado com sucesso!", "", [
-            {
-              text: "OK",
-              onPress: () => {
-                setDescription("");
-                setQuantity(0);
-              },
-            },
-          ]);
         })
         .catch((error: any) => console.log(error));
     } else {
