@@ -22,7 +22,21 @@ export function SignIn() {
     auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => Alert.alert("Usuário criado com sucesso!"))
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        console.log(error);
+
+        if (error.code === "auth/email-already-in-use") {
+          Alert.alert("E-mail não disponível!");
+        }
+
+        if (error.code === "auth/invalid-email") {
+          Alert.alert("E-mail inválido!");
+        }
+
+        if (error.code === "auth/weak-password") {
+          Alert.alert("A senha deve ter no minímo 6 dígitos!");
+        }
+      });
   };
 
   return (
