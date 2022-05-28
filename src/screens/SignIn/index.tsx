@@ -39,6 +39,23 @@ export function SignIn() {
       });
   };
 
+  const handleSigInWithEmailAndPassword = () => {
+    auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((user) => {
+        console.log(user);
+        Alert.alert("Login efetuado com sucesso!");
+      })
+      .catch((error) => {
+        if (
+          error.code === "auth/user-not-found" ||
+          error.code === "auth/wrong-password"
+        ) {
+          Alert.alert("E-mail ou senha inválidos!");
+        }
+      });
+  };
+
   return (
     <Container>
       <Title>MyShopping</Title>
@@ -52,7 +69,7 @@ export function SignIn() {
 
       <Input placeholder="senha" secureTextEntry onChangeText={setPassword} />
 
-      <Button title="Entrar" onPress={() => {}} />
+      <Button title="Entrar" onPress={handleSigInWithEmailAndPassword} />
 
       <Account>
         <ButtonText title="Recuperar senha" onPress={() => {}} />
