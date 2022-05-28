@@ -8,6 +8,12 @@ import Input from "../../components/Input";
 import { Container, Account, Title, Subtitle } from "./styles";
 
 export function SignIn() {
+  const handleSigInAnonymously = async () => {
+    const { user } = await auth().signInAnonymously();
+
+    console.log(user);
+  };
+
   return (
     <Container>
       <Title>MyShopping</Title>
