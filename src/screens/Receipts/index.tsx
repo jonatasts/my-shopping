@@ -9,6 +9,21 @@ import storage from "@react-native-firebase/storage";
 
 export function Receipts() {
   const [photos, setPhotos] = useState<FileProps[]>([]);
+  const [photoSelected, setPhotoSelected] = useState("");
+  const [photoInfo, setPhotoInfo] = useState("");
+
+  const handleShowImage = async (path: string) => {
+    const urlImage = await storage().ref(path).getDownloadURL();
+    const info = await storage().ref(path).getMetadata();
+    const timeCreated = new Date(info.timeCreated);
+    const formatedDate = `${timeCreated.getDate()}/${
+      timeCreated.getMonth() + 1
+    }/${timeCreated.getFullYear()}`;
+
+    setPhotoSelected(urlImage);
+
+    setPhotoInfo(`Upload realizado em ${formatedDate}`);
+  };
 
   useEffect(() => {
     storage()
@@ -32,15 +47,19 @@ export function Receipts() {
     <Container>
       <Header title="Comprovantes" />
 
-      <Photo uri="" />
+      <Photo uri={photoSelected} />
 
-      <PhotoInfo>Informações da foto</PhotoInfo>
+      <PhotoInfo>{photoInfo}</PhotoInfo>
 
       <FlatList
         data={photos}
         keyExtractor={(item) => item.name}
         renderItem={({ item }) => (
-          <File data={item} onShow={() => {}} onDelete={() => {}} />
+          <File
+            data={item}
+            onShow={() => handleShowImage(item.path)}
+            onDelete={() => {}}
+          />
         )}
         contentContainerStyle={{ paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
