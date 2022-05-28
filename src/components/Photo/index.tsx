@@ -20,13 +20,7 @@ export function Photo({ uri, ...rest }: Props) {
           <Image source={{ uri }} />
         ) : (
           <EmptyPhotoContainer>
-              <EmptyPhotoText>
-                clique para adicionar
-                ou para trocar a foto
-              </EmptyPhotoText>
-            </EmptyPhotoContainer >
-          )
-        }
+            <EmptyPhotoText>Nenhuma foto selecionada</EmptyPhotoText>
           </EmptyPhotoContainer>
         )}
       </Container>
