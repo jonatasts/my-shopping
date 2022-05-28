@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FlatList } from "react-native";
+import { Alert, FlatList } from "react-native";
 
 import { Container, PhotoInfo } from "./styles";
 import { Header } from "../../components/Header";
@@ -25,7 +25,18 @@ export function Receipts() {
     setPhotoInfo(`Upload realizado em ${formatedDate}`);
   };
 
-  useEffect(() => {
+  const handleDeleteImage = async (path: string) => {
+    storage()
+      .ref(path)
+      .delete()
+      .then(() => {
+        Alert.alert("Imagem excluída com sucesso!");
+        loadImages();
+      })
+      .catch((error) => console.log(error));
+  };
+
+  const loadImages = () => {
     storage()
       .ref("images")
       .list()
@@ -41,6 +52,10 @@ export function Receipts() {
 
         setPhotos(files);
       });
+  };
+
+  useEffect(() => {
+    loadImages();
   }, []);
 
   return (
@@ -58,7 +73,7 @@ export function Receipts() {
           <File
             data={item}
             onShow={() => handleShowImage(item.path)}
-            onDelete={() => {}}
+            onDelete={() => handleDeleteImage(item.path)}
           />
         )}
         contentContainerStyle={{ paddingBottom: 100 }}
