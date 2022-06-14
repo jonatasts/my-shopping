@@ -5,14 +5,14 @@ import theme from "../../theme";
 import { styles } from "./styles";
 import { LoadingProps } from "./types";
 
-const Loading = ({ label }: LoadingProps) => (
+const Loading = ({ label, color = theme.COLORS.PURPLE }: LoadingProps) => (
   <View style={styles.container}>
     <ActivityIndicator
       size={"large"}
-      color={theme.COLORS.PURPLE}
+      color={color}
       style={styles.activityIndicator}
     />
-    <Text style={styles.text}>{label}</Text>
+    {label && <Text style={styles.text}>{label}</Text>}
   </View>
 );
 
