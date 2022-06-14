@@ -1,10 +1,11 @@
-import styled from 'styled-components/native';
+import styled from "styled-components/native";
 
 export const Container = styled.View`
   width: 270px;
   height: 270px;
   margin-top: 32px;
   margin-bottom: 12px;
+  background-color: ${({ theme }) => theme.COLORS.GRAY50};
 `;
 
 export const EmptyPhotoContainer = styled.View`
