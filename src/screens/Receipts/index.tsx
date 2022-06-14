@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { Alert, FlatList } from "react-native";
+import storage from "@react-native-firebase/storage";
 
-import { Container, PhotoInfo } from "./styles";
+import { Container, ContainerLoading, PhotoInfo } from "./styles";
 import { Header } from "../../components/Header";
 import { Photo } from "../../components/Photo";
 import { File, FileProps } from "../../components/File";
-import storage from "@react-native-firebase/storage";
+import Loading from "../../components/Loading";
+import theme from "../../theme";
 
 export function Receipts() {
   const [photos, setPhotos] = useState<FileProps[]>([]);
   const [photoSelected, setPhotoSelected] = useState("");
   const [photoInfo, setPhotoInfo] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
 
   const handleShowImage = async (path: string) => {
+    setShowLoading(true);
+
     const urlImage = await storage().ref(path).getDownloadURL();
     const info = await storage().ref(path).getMetadata();
     const timeCreated = new Date(info.timeCreated);
@@ -23,6 +29,7 @@ export function Receipts() {
     setPhotoSelected(urlImage);
 
     setPhotoInfo(`Upload realizado em ${formatedDate}`);
+    setShowLoading(false);
   };
 
   const handleDeleteImage = async (path: string) => {
@@ -31,6 +38,7 @@ export function Receipts() {
       .delete()
       .then(() => {
         Alert.alert("Imagem excluída com sucesso!");
+        setPhotoSelected("");
         loadImages();
       })
       .catch((error) => console.log(error));
@@ -62,6 +70,12 @@ export function Receipts() {
     <Container>
       <Header title="Comprovantes" />
 
+      {showLoading && (
+        <ContainerLoading>
+          <Loading color={theme.COLORS.WHITE} />
+        </ContainerLoading>
+      )}
+
       <Photo uri={photoSelected} />
 
       <PhotoInfo>{photoInfo}</PhotoInfo>
@@ -79,6 +93,8 @@ export function Receipts() {
         contentContainerStyle={{ paddingBottom: 100 }}
         showsVerticalScrollIndicator={false}
         style={{ width: "100%", padding: 24 }}
+        refreshing={isFetching}
+        onRefresh={loadImages}
       />
     </Container>
   );
