@@ -26,33 +26,48 @@ export function Upload() {
 
       if (!result.cancelled) {
         setImage(result.uri);
+      } else {
+        setImage("");
+        setProgress("0");
+        setBytesTransferred("");
       }
     }
   }
 
+  const convertToKB = (bytes: number) => {
+    return Math.round(bytes / 1000);
+  };
+
   const handleUpload = () => {
-    const fileName = new Date().getTime();
-    const reference = storage().ref(`/images/${fileName}.png`);
+    if (image !== "") {
+      const fileName = new Date().getTime();
+      const reference = storage().ref(`/images/${fileName}.png`);
 
-    const uploadTask = reference.putFile(image);
+      const uploadTask = reference.putFile(image);
 
-    uploadTask.on("state_changed", (taskSnapshot) => {
-      const percent = (
-        (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) *
-        100
-      ).toFixed(0);
+      uploadTask.on("state_changed", (taskSnapshot) => {
+        const percent = (
+          (taskSnapshot.bytesTransferred / taskSnapshot.totalBytes) *
+          100
+        ).toFixed(0);
 
-      setProgress(percent);
-      setBytesTransferred(
-        `${taskSnapshot.bytesTransferred} transferidos de ${taskSnapshot.totalBytes}`
-      );
-    });
+        setProgress(percent);
+        setBytesTransferred(
+          `${convertToKB(
+            taskSnapshot.bytesTransferred
+          )}KB transferidos de ${convertToKB(taskSnapshot.totalBytes)}KB`
+        );
+      });
 
-    uploadTask
-      .then(() => {
-        Alert.alert("Upload concluído com sucesso!");
-      })
-      .catch((error) => console.log(error));
+      uploadTask
+        .then(() => {
+          Alert.alert("Upload concluído com sucesso!");
+          setImage("");
+          setProgress("0");
+          setBytesTransferred("");
+        })
+        .catch((error) => console.log(error));
+    }
   };
 
   return (
