@@ -44,7 +44,6 @@ export function SignIn() {
       .signInWithEmailAndPassword(email, password)
       .then((user) => {
         console.log(user);
-        Alert.alert("Login efetuado com sucesso!");
       })
       .catch((error) => {
         if (
