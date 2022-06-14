@@ -6,6 +6,8 @@ import { Product, ProductProps } from "../Product";
 import Loading from "../Loading";
 
 import { styles } from "./styles";
+import EmptyCart from "../EmptyCart";
+import emptyCartImage from "../../assets/empty_cart.png";
 
 export function ShoppingList() {
   const [products, setProducts] = useState<ProductProps[] | undefined>([]);
@@ -25,14 +27,14 @@ export function ShoppingList() {
         setRefreshing(true);
 
         if (snapshot) {
-        const data = snapshot.docs.map((doc) => {
-          return {
-            id: doc.id,
-            ...doc.data(),
-          };
-        }) as ProductProps[];
+          const data = snapshot.docs.map((doc) => {
+            return {
+              id: doc.id,
+              ...doc.data(),
+            };
+          }) as ProductProps[];
 
-        setProducts(data);
+          setProducts(data);
         }
 
         setTimeout(() => {
@@ -57,6 +59,7 @@ export function ShoppingList() {
       showsVerticalScrollIndicator={false}
       style={styles.list}
       contentContainerStyle={styles.content}
+      ListEmptyComponent={<EmptyCart source={emptyCartImage} />}
     />
   );
 }
