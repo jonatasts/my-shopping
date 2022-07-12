@@ -1,4 +1,4 @@
-import styled from 'styled-components/native';
+import styled from "styled-components/native";
 
 export const Title = styled.Text`
   font-size: 14px;
@@ -7,3 +7,6 @@ export const Title = styled.Text`
   margin-left: 7px;
 `;
 
+export const Load = styled.ActivityIndicator.attrs(({ theme }) => ({
+  color: theme.COLORS.WHITE,
+}))``;
