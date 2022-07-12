@@ -8,7 +8,7 @@ import Input from "../../components/Input";
 import { Container, Account, Title, Subtitle } from "./styles";
 import { Alert } from "react-native";
 
-export function SignIn() {
+export const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoginIn, setIsLoginIn] = useState(false);
@@ -135,4 +135,4 @@ export function SignIn() {
       </Account>
     </Container>
   );
-}
+};
