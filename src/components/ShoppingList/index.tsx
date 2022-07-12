@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList } from "react-native";
 import firestore from "@react-native-firebase/firestore";
 
@@ -14,10 +14,7 @@ export function ShoppingList() {
   const [refreshing, setRefreshing] = useState(true);
   const [initialized, setInitialized] = useState(false);
   const TIME_INITIALIZED = initialized ? 500 : 2000;
-
-  const textLoading = useMemo(() => {
-    return initialized ? "Atualizando..." : "Carregando...";
-  }, [initialized]);
+  const textLoading = "Carregando...";
 
   useEffect(() => {
     const subscribe = firestore()
