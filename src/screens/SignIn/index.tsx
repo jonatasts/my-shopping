@@ -7,7 +7,6 @@ import Input from "../../components/Input";
 
 import { Container, Account, Title, Subtitle } from "./styles";
 import { Alert } from "react-native";
-import { Info } from "../../components/Product/styles";
 
 export function SignIn() {
   const [email, setEmail] = useState("");
@@ -34,6 +33,8 @@ export function SignIn() {
   };
 
   const validateAccount = (code: string): string => {
+    setIsLoginIn(false);
+
     if (code === "auth/user-not-found" || code === "auth/wrong-password") {
       return "E-mail ou senha inválidos!";
     }
@@ -50,7 +51,6 @@ export function SignIn() {
       return "A senha deve ter no minímo 6 dígitos!";
     }
 
-    setIsLoginIn(false);
     return "";
   };
 
@@ -116,7 +116,11 @@ export function SignIn() {
 
       <Input placeholder="senha" secureTextEntry onChangeText={setPassword} />
 
-      <Button title="Entrar" onPress={handleSigInWithEmailAndPassword} />
+      <Button
+        title="Entrar"
+        onPress={handleSigInWithEmailAndPassword}
+        isLoading={isLoginIn}
+      />
 
       <Account>
         <ButtonText title="Recuperar senha" onPress={handleForgotPassword} />
