@@ -99,7 +99,7 @@ export const SignIn = () => {
       .sendPasswordResetEmail(email)
       .then(() => {
         Alert.alert(
-          "Enviamos um link no seu e-mail para você redefinir sua senha!"
+          "Enviamos um link no seu e-mail para você redefinir sua senha! Verifique sua caixa de spam!"
         );
       })
       .catch((error) => {
