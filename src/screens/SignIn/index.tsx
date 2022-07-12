@@ -32,11 +32,13 @@ export function SignIn() {
     return "success";
   };
 
-  const validateAccount = (code: string): string => {
+  const validateAccount = (code: string, recoverEmail = false): string => {
     setIsLoginIn(false);
 
     if (code === "auth/user-not-found" || code === "auth/wrong-password") {
-      return "E-mail ou senha inválidos!";
+      return recoverEmail
+        ? "E-mail não cadastrado!"
+        : "E-mail ou senha inválidos!";
     }
 
     if (code === "auth/email-already-in-use") {
@@ -100,7 +102,12 @@ export function SignIn() {
           "Enviamos um link no seu e-mail para você redefinir sua senha!"
         );
       })
-      .catch((error) => console.log(error));
+      .catch((error) => {
+        const statusError = validateAccount(error.code, true);
+
+        console.log(error);
+        return Alert.alert("Recuperar senha", statusError);
+      });
   };
 
   return (
