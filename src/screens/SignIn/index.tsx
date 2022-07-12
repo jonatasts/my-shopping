@@ -7,10 +7,12 @@ import Input from "../../components/Input";
 
 import { Container, Account, Title, Subtitle } from "./styles";
 import { Alert } from "react-native";
+import { Info } from "../../components/Product/styles";
 
 export function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoginIn, setIsLoginIn] = useState(false);
 
   const handleSigInAnonymously = async () => {
     const { user } = await auth().signInAnonymously();
@@ -18,41 +20,76 @@ export function SignIn() {
     console.log(user);
   };
 
+  const validateFields = (isLoading = false): string => {
+    if (!email.trim()) {
+      return "Informe o e-mail!";
+    }
+
+    if (!password.trim()) {
+      return "Informe a senha!";
+    }
+
+    setIsLoginIn(isLoading);
+    return "success";
+  };
+
+  const validateAccount = (code: string): string => {
+    if (code === "auth/user-not-found" || code === "auth/wrong-password") {
+      return "E-mail ou senha inválidos!";
+    }
+
+    if (code === "auth/email-already-in-use") {
+      return "E-mail não disponível!";
+    }
+
+    if (code === "auth/invalid-email") {
+      return "E-mail inválido!";
+    }
+
+    if (code === "auth/weak-password") {
+      return "A senha deve ter no minímo 6 dígitos!";
+    }
+
+    setIsLoginIn(false);
+    return "";
+  };
+
   const handleCreateUserAccount = () => {
-    auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(() => Alert.alert("Usuário criado com sucesso!"))
-      .catch((error) => {
-        console.log(error);
+    const status = validateFields(true);
 
-        if (error.code === "auth/email-already-in-use") {
-          Alert.alert("E-mail não disponível!");
-        }
+    if (status == "success") {
+      auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then(() => Alert.alert("Usuário criado com sucesso!"))
+        .catch((error) => {
+          const statusError = validateAccount(error.code);
 
-        if (error.code === "auth/invalid-email") {
-          Alert.alert("E-mail inválido!");
-        }
-
-        if (error.code === "auth/weak-password") {
-          Alert.alert("A senha deve ter no minímo 6 dígitos!");
-        }
-      });
+          console.log(error);
+          return Alert.alert("Cadastro", statusError);
+        });
+    } else {
+      return Alert.alert("Cadastro", status);
+    }
   };
 
   const handleSigInWithEmailAndPassword = () => {
-    auth()
-      .signInWithEmailAndPassword(email, password)
-      .then((user) => {
-        console.log(user);
-      })
-      .catch((error) => {
-        if (
-          error.code === "auth/user-not-found" ||
-          error.code === "auth/wrong-password"
-        ) {
-          Alert.alert("E-mail ou senha inválidos!");
-        }
-      });
+    const status = validateFields(true);
+
+    if (status == "success") {
+      auth()
+        .signInWithEmailAndPassword(email, password)
+        .then((user) => {
+          console.log(user);
+        })
+        .catch((error) => {
+          const statusError = validateAccount(error.code);
+
+          console.log(error);
+          return Alert.alert("Login", statusError);
+        });
+    } else {
+      return Alert.alert("Cadastro", status);
+    }
   };
 
   const handleForgotPassword = async () => {
